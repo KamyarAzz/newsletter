@@ -1,3 +1,5 @@
+"use client";
+
 import Actions from "@/components/dashboard/Actions";
 import CurrentPref from "@/components/dashboard/CurrentPref";
 import InfoList from "@/components/dashboard/InfoList";

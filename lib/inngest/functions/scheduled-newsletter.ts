@@ -3,7 +3,7 @@ import {inngest} from "../client";
 
 export default inngest.createFunction(
   {id: "newsletter/schedule"},
-  {event: "newslettter.schedule"},
+  {event: "newsletter.schedule"},
   async ({event, step, runId}) => {
     const categories = ["technology", "business", "policies"];
     const allArticles = await step.run("fetch-news", async () => {
@@ -43,5 +43,6 @@ export default inngest.createFunction(
       },
     });
     console.log(summary.choices[0].message.content);
+    return {};
   }
 );
