@@ -2,7 +2,7 @@
 
 import {createClient} from "@/lib/client";
 import {Session, User} from "@supabase/supabase-js";
-import {createContext, ReactNode, useEffect, useState} from "react";
+import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 
 interface AuthContextType {
   user: User | null;
@@ -29,10 +29,16 @@ export function AuthProvider({children}: {children: ReactNode}) {
   }, []);
 
   const signOut = async () => {
-    supabase.auth.signOut();
+    await supabase.auth.signOut();
   };
 
   const value = {user, session, loading, signOut};
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw Error("Something went wrong!");
+  return context;
+};
