@@ -89,7 +89,9 @@ export default function SigninPage() {
       <h1 className="text-2xl font-bold">
         {isSignup ? "Create Account" : "Sign In"}
       </h1>
-      {message.type && <AlertBox type="danger">{message.message}</AlertBox>}
+      {message.type && (
+        <AlertBox type={message.type}>{message.message}</AlertBox>
+      )}
       <div className="flex flex-col gap-1">
         <label htmlFor="email">Email address</label>
         <Input
