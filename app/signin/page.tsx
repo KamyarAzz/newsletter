@@ -13,7 +13,7 @@ type FormData = {
 };
 
 type TMessage = {
-  type: "success" | "danger" | "warn";
+  type: "success" | "danger" | "warn" | null;
   message: string | null;
 };
 
@@ -23,12 +23,13 @@ const initialFormData = {
 };
 
 const initialMessage: TMessage = {
-  type: "success",
+  type: null,
   message: null,
 };
 
 export default function SigninPage() {
   const [isSignup, setIsSignup] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [message, setMessage] = useState<TMessage>(initialMessage);
   const supabase = createClient();
@@ -37,6 +38,7 @@ export default function SigninPage() {
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      setLoading(true);
       setMessage(initialMessage);
       if (isSignup) {
         const {error} = await supabase.auth.signUp({
@@ -63,7 +65,13 @@ export default function SigninPage() {
         }
         router.push("/dashboard");
       }
-    } catch {}
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setMessage({type: "danger", message: errorMessage});
+      throw Error("Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const changeHandler = (
@@ -76,7 +84,7 @@ export default function SigninPage() {
   return (
     <form
       onSubmit={submitHandler}
-      className="flex rounded-md flex-col gap-5 w-[90%] md:w-auto max-w-[400px] mx-auto p-8 shadow-sm-base mt-5"
+      className="flex rounded-md flex-col dark:bg-darkFr gap-5 w-[90%] md:w-auto max-w-[400px] mx-auto p-8 shadow-sm-base mt-5"
     >
       <h1 className="text-2xl font-bold">
         {isSignup ? "Create Account" : "Sign In"}
@@ -106,7 +114,9 @@ export default function SigninPage() {
           onChange={(e) => changeHandler(e, "password")}
         />
       </div>
-      <Button type="submit">{isSignup ? "Create Account" : "Sign In"}</Button>
+      <Button disabled={loading} type="submit">
+        {isSignup ? "Create Account" : "Sign In"}
+      </Button>
       {isSignup ? (
         <p>
           Already have an account?{" "}

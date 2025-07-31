@@ -43,7 +43,10 @@
   --radius-xl: calc(var(--radius) + 4px);
   --color-light-black: var(--light-black);
   --shadow-sm-base: 0px 4px 11px 2px var(--light-black);
-
+  --color-darkFr: var(--dark-foreground);
+  --color-darkBtnBg: var(--dark-button-background);
+  --color-darkBtnFr: var(--dark-button-foreground);
+  --color-darkRing: var(--dark-ring);
 }
 
 :root {
@@ -80,9 +83,13 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+  --dark-foreground:oklch(17.7% 0.005 285.823);
+  --dark-button-background:oklch(36% 0.12 258);
+  --dark-button-foreground:oklch(92% 0.008 280);
+  --dark-ring:oklch(72% 0.15 240);
 }
 
-.dark {
+/* .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
@@ -114,6 +121,11 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+} */
+
+.dark{
+  --background: oklch(14.1% 0.005 285.823);
+  --foreground: oklch(0.984 0.003 247.858);
 }
 
 @layer base {
