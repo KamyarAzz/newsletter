@@ -1,11 +1,11 @@
 "use client";
 
+import {useRouter} from "next/navigation";
+import React, {useState} from "react";
 import AlertBox from "@/components/ui/AlertBox";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
-import {createClient} from "@/lib/client";
-import {useRouter} from "next/navigation";
-import React, {useState} from "react";
+import {useAuth} from "@/contexts/AuthContext";
 
 type FormData = {
   email: string;
@@ -29,22 +29,18 @@ const initialMessage: TMessage = {
 
 export default function SigninPage() {
   const [isSignup, setIsSignup] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [message, setMessage] = useState<TMessage>(initialMessage);
-  const supabase = createClient();
   const router = useRouter();
+
+  const {signIn, signUp, loading} = useAuth();
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setLoading(true);
       setMessage(initialMessage);
       if (isSignup) {
-        const {error} = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-        });
+        const error = await signUp(formData.email, formData.password);
         if (error) {
           setMessage({type: "danger", message: error.message});
           throw error;
@@ -54,10 +50,7 @@ export default function SigninPage() {
           message: "Check your email for the confirmation link!",
         });
       } else {
-        const {error} = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
-        });
+        const error = await signIn(formData.email, formData.password);
 
         if (error) {
           setMessage({type: "danger", message: error.message});
@@ -69,8 +62,6 @@ export default function SigninPage() {
       const errorMessage = err instanceof Error ? err.message : String(err);
       setMessage({type: "danger", message: errorMessage});
       throw Error("Something went wrong!");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -117,7 +108,13 @@ export default function SigninPage() {
         />
       </div>
       <Button disabled={loading} type="submit">
-        {isSignup ? "Create Account" : "Sign In"}
+        {isSignup
+          ? loading
+            ? "Creating Account"
+            : "Create Account"
+          : loading
+          ? "Signing In"
+          : "Sign In"}
       </Button>
       {isSignup ? (
         <p>

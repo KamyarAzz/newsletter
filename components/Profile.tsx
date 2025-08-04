@@ -6,7 +6,7 @@ import {useRouter} from "next/navigation";
 import {Button} from "./ui/button";
 
 export default function Profile() {
-  const {user, signOut} = useAuth();
+  const {user, signOut, loading} = useAuth();
   const router = useRouter();
 
   const logout = async () => {
@@ -36,8 +36,8 @@ export default function Profile() {
           {user && user.created_at && (
             <p>Joined: {convertDate(user.created_at)}</p>
           )}
-          <Button className="mx-auto" onClick={logout}>
-            <p>Logout</p>
+          <Button disabled={loading} className="mx-auto" onClick={logout}>
+            <p>{loading ? "Logging Out" : "Logout"}</p>
             <LogOut className="w-6 h-6" />
           </Button>
         </div>
