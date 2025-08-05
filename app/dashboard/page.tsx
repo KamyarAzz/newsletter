@@ -6,7 +6,7 @@ import React from "react";
 const infoList = {
   title: "How it works",
   items: [
-    "Your newsletter is generated based on your selected categories",
+    "Your newsletter is generated based on your selected categories.",
     "Newsletters are delivered to your email at 9 AM according to your chosen frequency.",
     "You can pause or resume your newsletter at any time.",
     "Update your prefrences anytime to change categories or frequency.",
@@ -20,7 +20,7 @@ export default function DashboardPage() {
       <p className="text-zinc-700 dark:text-zinc-300">
         Manage your personalized newsletter prefrences
       </p>
-      <div className="flex justify-between gap-4 mt-2 w-full">
+      <div className="flex flex-col md:flex-row justify-between gap-4 mt-2 w-full">
         <CurrentPref />
         <Actions />
       </div>

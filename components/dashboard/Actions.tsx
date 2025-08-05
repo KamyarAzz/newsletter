@@ -1,3 +1,5 @@
+"use client";
+
 import {CreditCard, ShieldMinus, SquarePen} from "lucide-react";
 import React from "react";
 
