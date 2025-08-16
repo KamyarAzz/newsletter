@@ -1,6 +1,5 @@
 "use client";
 
-import React, {useState} from "react";
 import CategoryCard from "./CategoryCard";
 import sportsImage from "@/assets/categories/sports.jpg";
 import politicsImage from "@/assets/categories/politics.jpg";
@@ -16,8 +15,8 @@ import gamingImage from "@/assets/categories/gaming.jpg";
 import {Category} from "@/types";
 
 type Props = {
-  selectedCategoryIds: string[];
-  setSelectedCategoryIds: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedCategoryTitles: string[];
+  setSelectedCategoryTitles: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 const categories: Category[] = [
@@ -34,15 +33,15 @@ const categories: Category[] = [
 ];
 
 export default function Categories({
-  selectedCategoryIds,
-  setSelectedCategoryIds,
+  selectedCategoryTitles,
+  setSelectedCategoryTitles,
 }: Props) {
-  const handleSelect = (categoryId: string) => {
-    setSelectedCategoryIds((prev) => {
-      if (prev.includes(categoryId)) {
-        return prev.filter((id) => id !== categoryId);
+  const handleSelect = (categoryTitle: string) => {
+    setSelectedCategoryTitles((prev) => {
+      if (prev.includes(categoryTitle)) {
+        return prev.filter((title) => title !== categoryTitle);
       } else {
-        return [...prev, categoryId];
+        return [...prev, categoryTitle];
       }
     });
   };
@@ -57,7 +56,7 @@ export default function Categories({
           <CategoryCard
             clickHandler={handleSelect}
             isSelected={Boolean(
-              selectedCategoryIds.find((id) => id === category.id)
+              selectedCategoryTitles.find((title) => title === category.title)
             )}
             category={category}
             key={category.id}
@@ -65,8 +64,8 @@ export default function Categories({
         ))}
       </div>
       <p className="mt-2 h-3">
-        {selectedCategoryIds.length > 0 &&
-          `${selectedCategoryIds.length} categories selected`}
+        {selectedCategoryTitles.length > 0 &&
+          `${selectedCategoryTitles.length} categories selected`}
       </p>
     </div>
   );

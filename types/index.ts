@@ -13,3 +13,11 @@ export type FrequencyOptions = {
   name: string;
   description: string;
 };
+
+export type UserPrefrences = {
+  categories: string[];
+  frequency: string;
+  email: string;
+  is_active: boolean;
+  created_at: string;
+};

@@ -1,11 +1,15 @@
 "use client";
 
-import React from "react";
-import CategoryItem from "../ui/CategoryItem";
-import StatusCircle from "../ui/StatusCircle";
+import CategoryItem from "@/components/ui/CategoryItem";
+import StatusCircle from "@/components/ui/StatusCircle";
 import {useAuth} from "@/contexts/AuthContext";
+import {UserPrefrences} from "@/types";
 
-export default function CurrentPref() {
+type Props = {
+  prefrences: UserPrefrences;
+};
+
+export default function CurrentPref({prefrences}: Props) {
   const {user} = useAuth();
 
   const convertDate = (date: string) => {
@@ -19,34 +23,35 @@ export default function CurrentPref() {
     return formatted;
   };
 
-  const c = ["Technology", "Science", "Politics"];
   return (
     <div className="flex flex-col gap-4 shadow-sm-base dark:bg-darkFr rounded-md px-8 py-4 flex-auto">
       <h1 className="text-xl font-bold">Current Prefrences</h1>
       <div className="flex flex-col gap-2">
         <p>Categories</p>
         <div className="flex  gap-2">
-          {c.map((category) => (
+          {prefrences.categories.map((category) => (
             <CategoryItem key={category} title={category} />
           ))}
         </div>
       </div>
       <div className="flex flex-col gap-2">
         <p>Frequency</p>
-        <p className="text-zinc-600 dark:text-zinc-400">daily</p>
+        <p className="text-zinc-600 dark:text-zinc-400">
+          {prefrences.frequency}
+        </p>
       </div>
       {user && user.email && (
         <div className="flex flex-col gap-2">
           <p>Email</p>
-          <p className="text-zinc-600 dark:text-zinc-400">{user.email}</p>
+          <p className="text-zinc-600 dark:text-zinc-400">{prefrences.email}</p>
         </div>
       )}
       <div className="flex flex-col gap-2">
         <p>Status</p>
         <div className="flex gap-3 items-center">
-          <StatusCircle type={true ? "success" : "danger"} />
+          <StatusCircle type={prefrences.is_active ? "success" : "danger"} />
           <p className="text-zinc-600 dark:text-zinc-400">
-            {true ? "Active" : "Inactive"}
+            {prefrences.is_active ? "Active" : "Inactive"}
           </p>
         </div>
       </div>
@@ -54,7 +59,7 @@ export default function CurrentPref() {
         <div className="flex flex-col gap-2">
           <p>Created</p>
           <p className="text-zinc-600 dark:text-zinc-400">
-            {convertDate(user.created_at)}
+            {convertDate(prefrences.created_at)}
           </p>
         </div>
       )}

@@ -11,7 +11,9 @@ import {useRouter} from "next/navigation";
 export default function SettingsPage() {
   const [selectedFrequencyId, setSelectedFrequencyId] =
     useState<Frequencies>("weekly");
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
+  const [selectedCategoryTitles, setSelectedCategoryTitles] = useState<
+    string[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const {user} = useAuth();
@@ -19,7 +21,7 @@ export default function SettingsPage() {
 
   const saveHandler = async (e: FormEvent) => {
     e.preventDefault();
-    if (selectedCategoryIds.length === 0) {
+    if (selectedCategoryTitles.length === 0) {
       alert("Please select atleast one category!");
       return;
     }
@@ -33,7 +35,7 @@ export default function SettingsPage() {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-          categories: selectedCategoryIds,
+          categories: selectedCategoryTitles,
           frequency: selectedFrequencyId,
           email: user.email,
         }),
@@ -57,8 +59,8 @@ export default function SettingsPage() {
       className="flex flex-col gap-2 items-center justify-center p-5 m-5 w-[95%] md:w-[90%] lg:w-[85%] xl:w-[75%] max-w-[1150px] mx-auto shadow-sm-base dark:bg-darkFr rounded-md"
     >
       <Categories
-        selectedCategoryIds={selectedCategoryIds}
-        setSelectedCategoryIds={setSelectedCategoryIds}
+        selectedCategoryTitles={selectedCategoryTitles}
+        setSelectedCategoryTitles={setSelectedCategoryTitles}
       />
       <Frequency
         selectedFrequencyId={selectedFrequencyId}
@@ -67,7 +69,7 @@ export default function SettingsPage() {
       <div className="w-full flex justify-center md:justify-end mt-6 pt-3 border-t md:border-none dark:border-zinc-700">
         <Button
           type="submit"
-          disabled={selectedCategoryIds.length === 0 || loading}
+          disabled={selectedCategoryTitles.length === 0 || loading}
           className="text-lg p-6"
         >
           {loading ? "Updating Prefrences..." : "Save Prefrences"}
