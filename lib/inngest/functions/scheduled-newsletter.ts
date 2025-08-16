@@ -1,11 +1,13 @@
 import {fetchArticles} from "@/lib/news";
 import {inngest} from "../client";
+import {marked} from "marked";
+import {sendEmail} from "@/lib/email";
 
 export default inngest.createFunction(
   {id: "newsletter/schedule"},
   {event: "newsletter.schedule"},
   async ({event, step, runId}) => {
-    const categories = ["technology", "business", "policies"];
+    const categories = event.data.categories;
     const allArticles = await step.run("fetch-news", async () => {
       return fetchArticles(categories);
     });
@@ -42,7 +44,24 @@ export default inngest.createFunction(
         ],
       },
     });
-    console.log(summary.choices[0].message.content);
+
+    const newsletterContent = summary.choices[0].message.content;
+
+    if (!newsletterContent) {
+      throw new Error("Failed to generate newsletter content");
+    }
+
+    const htmlResult = await marked(newsletterContent);
+
+    await step.run("send-email", async () => {
+      await sendEmail(
+        event.data.email,
+        event.data.categories.join(", "),
+        allArticles.length,
+        htmlResult
+      );
+    });
+
     return {};
   }
 );
